@@ -83,4 +83,3 @@ class Summary:
         match = re.search(pattern, message)
 
         return int(match.group())
-
