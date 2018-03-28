@@ -60,12 +60,7 @@ Article summaries will be store in the `sm_api_content` attribute.
 s.sm_api_content
 ```
 
-
-
-
-    'Too many Lego bricks is a problem many parents will sympathise with, but now the toy firm itself has admitted it has made too many. 3,700 - the number of different types of Lego bricks. In September, Lego said its half-year results had suffered because it had stretched itself too thin by diversifying into products that were not toys, such as the Lego movies.'
-
-
+'Too many Lego bricks is a problem many parents will sympathise with, but now the toy firm itself has admitted it has made too many. 3,700 - the number of different types of Lego bricks. In September, Lego said its half-year results had suffered because it had stretched itself too thin by diversifying into products that were not toys, such as the Lego movies.'
 
 ### Accessing keywords...
 
@@ -118,5 +113,4 @@ result = 'SMMRY reduced %s article "%s" by %s into %s sentences; %s requests rem
 print(result % attributes)
 ```
 
-    SMMRY reduced bbc.com article "Lego admits it made too many bricks" by 80% into 5 sentences; 29 requests remaining today. Top keywords are: ['Lego', 'sales', 'year'].
-    
+SMMRY reduced bbc.com article "Lego admits it made too many bricks" by 80% into 5 sentences; 29 requests remaining today. Top keywords are: ['Lego', 'sales', 'year'].
