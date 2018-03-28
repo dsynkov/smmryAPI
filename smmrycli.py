@@ -63,8 +63,6 @@ def main():
     urls, name = parse_input_file(args.path)
     output_file = get_output_filename(name)
 
-    print(output_file)
-
     with open(output_file, 'w', newline="", encoding='utf-8') as file:
         writer = csv.writer(file, dialect='excel')
         writer.writerow([
