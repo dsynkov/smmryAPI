@@ -108,7 +108,7 @@ attributes = (
     s.sm_api_keyword_array     # Keywords
 )
 
-result = 'SMMRY reduced %s article "%s" by %s into %s sentences; %s requests remaining today. Top keywords are: %a.'
+result = 'SMMRY reduced %s article "%s" by %s to %s sentences; %s requests remaining. \Top keywords are: %a.'
     
 print(result % attributes)
 ```
