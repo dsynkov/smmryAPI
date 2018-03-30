@@ -60,7 +60,12 @@ Article summaries will be store in the `sm_api_content` attribute.
 s.sm_api_content
 ```
 
-'Too many Lego bricks is a problem many parents will sympathise with, but now the toy firm itself has admitted it has made too many. 3,700 - the number of different types of Lego bricks. In September, Lego said its half-year results had suffered because it had stretched itself too thin by diversifying into products that were not toys, such as the Lego movies.'
+
+
+
+    'Too many Lego bricks is a problem many parents will sympathise with, but now the toy firm itself has admitted it has made too many. 915,103,765 - the number of ways to combine six two-by-four Lego bricks of the same colour. 3,700 - the number of different types of Lego bricks. In September, Lego said its half-year results had suffered because it had stretched itself too thin by diversifying into products that were not toys, such as the Lego movies. Lego chairman Jorgen Knudstorp said at the time that adding complexity to the company had made it harder for the toymaker to grow further.'
+
+
 
 ### Accessing keywords...
 
@@ -73,24 +78,6 @@ s = smmry.summarize(url,sm_length=3,sm_keyword_count=12)
 s.sm_api_keyword_array
 ```
 
-
-
-
-    ['Lego',
-     'sales',
-     'year',
-     'Too',
-     'bricks',
-     'toy',
-     'firm',
-     'performance',
-     'Christiansen',
-     'grow',
-     'stock',
-     'business']
-
-
-
 ### Other attributes...
 
 To check out other attributes view the [official documentation](https://smmry.com/api) or or run `s.__dict__.keys()`.
@@ -100,17 +87,35 @@ To check out other attributes view the [official documentation](https://smmry.co
 s = smmry.summarize(url,sm_length=5,sm_keyword_count=3)
     
 attributes = (
-    s.domain,                  # The domain name of the URL
+    s.sm_domain,               # The domain name of the URL
     s.sm_api_title,            # The article's titled 
+    s.sm_url,                  # URL of the article 
     s.sm_api_content_reduced,  # Percent by which reduced
-    s.length,                  # Number of sentences 
-    s.requests_remaining,      # Number of queries left
+    s.sm_length,               # Number of sentences 
+    s.sm_requests_remaining,   # Number of queries left
     s.sm_api_keyword_array     # Keywords
 )
 
-result = 'SMMRY reduced %s article "%s" by %s to %s sentences; %s requests remaining. \Top keywords are: %a.'
-    
+result = """
+
+SMMRY reduced %s article "%s" from url
+[%s] by %s to %s sentences.
+
+You have %s requests remaining today.
+
+Top keywords are: %s.'
+"""
+
 print(result % attributes)
 ```
 
-SMMRY reduced bbc.com article "Lego admits it made too many bricks" by 80% into 5 sentences; 29 requests remaining today. Top keywords are: ['Lego', 'sales', 'year'].
+    
+    
+    SMMRY reduced bbc.com article "Lego admits it made too many bricks" from url
+    [http://www.bbc.com/news/business-43298897] by 80% to 5 sentences.
+    
+    You have 5 requests remaining today.
+    
+    Top keywords are: ['Lego', 'sales', 'year'].'
+    
+    
