@@ -10,30 +10,62 @@ class SmmryAPIException(Exception):
 class SmmryAPI:
 
     def __init__(self, key):
+
         self.key = key
         self.max = 40  # Max number of sentences
         self.endpoint = 'http://api.smmry.com/'
 
-    def check_length(self, params):
+        self.bool_params = [
+            'sm_with_break',
+            'sm_with_encode',
+            'sm_ignore_length',
+            'sm_quote_avoid',
+            'sm_question_avoid',
+            'sm_exclamation_avoid'
+        ]
 
-        if params.get('SM_LENGTH'):
-            if params['SM_LENGTH'] > self.max:
-                params['SM_LENGTH'] = self.max
+    def check_length(self, kwargs_dict):
 
-        return params
+        if kwargs_dict.get('sm_length'):
+            if kwargs_dict['sm_length'] > self.max:
+                kwargs_dict['sm_length'] = self.max
 
-    def summarize(self, url, **kwargs):
+        return kwargs_dict
 
-        kwargs = {k.upper(): v for k, v in kwargs.items()}
+    def check_bool(self, kwargs_dict):
+
+        keys_to_drop = []
+
+        for key, value in kwargs_dict.items():
+            if key in self.bool_params:
+                if not value:
+                    keys_to_drop.append(key)
+
+        for key in keys_to_drop:
+            kwargs_dict.pop(key)
+
+        return kwargs_dict
+
+    def kwargs2params(self, url, kwargs_dict):
+
+        params_length = self.check_length(kwargs_dict)
+        params_bool = self.check_bool(params_length)
+
+        params = collections.OrderedDict(params_bool)
 
         # "Note: The parameter &SM_URL= should always be at the end of the
         # request url to avoid complications" (see https://smmry.com/api).
-        params = collections.OrderedDict(kwargs)
-        params.update({'SM_API_KEY': self.key})
-        params.update({'SM_URL': url})
-        params.move_to_end('SM_URL')
+        params.update({'sm_api_key': self.key})
+        params.update({'sm_url': url})
+        params.move_to_end('sm_url')
 
-        params = self.check_length(params)
+        return {k.upper(): v for k, v in params.items()}
+
+    def summarize(self, url, **kwargs):
+
+        params = self.kwargs2params(url, kwargs)
+
+        print(params)
 
         response = requests.get(self.endpoint, params=params)
         response.close()
