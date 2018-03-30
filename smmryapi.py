@@ -1,5 +1,4 @@
 import requests
-import tldextract
 import collections
 
 from summary import Summary
