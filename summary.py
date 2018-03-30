@@ -7,7 +7,8 @@ class Summary:
     def __init__(self, smmry_dict, params, response):
 
         self.params = params
-        self.url = response.url
+        self.api_url = response.url
+        self.sm_url = params['SM_URL']
         self.smmry_dict = smmry_dict
 
         self.sm_domain = self.get_domain_name(params)
