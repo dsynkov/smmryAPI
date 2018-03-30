@@ -1,11 +1,12 @@
 import pandas as pd
 import argparse
 import pathlib
+import ntpath
 import csv
 import os
 
-from smmryapi import SmmryAPIException
 from smmryapi import SmmryAPI
+from smmryapi import SmmryAPIException
 
 
 def get_arguments():
@@ -29,7 +30,8 @@ def parse_input_file(path):
 
     abspath = os.path.abspath(path)
 
-    name, ext = os.path.splitext(abspath)
+    _, ext = os.path.splitext(abspath)
+    name = os.path.basename(path).split('.')[0]
 
     if ext == '.xlsx' or ext == '.xls':
         df = pd.read_excel(
@@ -40,12 +42,14 @@ def parse_input_file(path):
 
         urls = df.iloc[:, 0].tolist()
 
-    elif ext == '.txt' or ext == '.cxv':
+    elif ext == '.txt' or ext == '.csv':
         urls = open(abspath, 'r').read().splitlines()
 
     else:
-        raise SmmryAPIException("URLs must be in a single-column \
-            .txt, .csv, .xlsx, or .xls file.")
+        raise Exception("URLs must be in a single-column .txt, .csv, .xlsx, or .xls file.")
+
+    if len(urls) == 0:
+        raise Exception("File %s does not contain any URLs." % path)
 
     return urls, name
 
@@ -54,12 +58,15 @@ def get_output_filename(name):
 
     path = pathlib.PurePath(os.getcwd())
 
-    return str(path/'exports'/(name+'-summaries.csv'))
+    export_path = path / 'exports' / (name + '-summaries.csv')
+
+    return str(export_path)
 
 
 def main():
 
     args = get_arguments()
+
     urls, name = parse_input_file(args.path)
     output_file = get_output_filename(name)
 
@@ -77,8 +84,8 @@ def main():
 
         smmry = SmmryAPI(args.key)
 
+        requests_remaining = []
         total_urls = len(urls)
-
         successful_urls = 0
 
         for url in urls:
@@ -95,12 +102,14 @@ def main():
                 writer.writerow([
                     url,
                     s.sm_api_content,
-                    s.length,
+                    s.sm_length,
                     s.sm_api_title,
                     s.sm_api_content_reduced,
                     args.keywords,
                     s.sm_api_keyword_array
                 ])
+
+                requests_remaining = s.sm_requests_remaining
 
             except SmmryAPIException as e:
                 print(e, url)
@@ -108,8 +117,8 @@ def main():
         print("\nSuccess! A total of %s out of %s summaries have been retrieved.\n"
               % (successful_urls, total_urls))
 
-        print("You have %s requests remaining for today.\n"
-              % s.requests_remaining)
+        print("You have %s requests remaining for today."
+              % requests_remaining)
 
 
 if __name__ == '__main__':

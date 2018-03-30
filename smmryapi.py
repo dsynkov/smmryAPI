@@ -1,7 +1,7 @@
 import requests
 import collections
-
 from summary import Summary
+
 
 class SmmryAPIException(Exception):
     pass
@@ -14,6 +14,14 @@ class SmmryAPI:
         self.max = 40  # Max number of sentences
         self.endpoint = 'http://api.smmry.com/'
 
+    def check_length(self, params):
+
+        if params.get('SM_LENGTH'):
+            if params['SM_LENGTH'] > self.max:
+                params['SM_LENGTH'] = self.max
+
+        return params
+
     def summarize(self, url, **kwargs):
 
         kwargs = {k.upper(): v for k, v in kwargs.items()}
@@ -25,9 +33,7 @@ class SmmryAPI:
         params.update({'SM_URL': url})
         params.move_to_end('SM_URL')
 
-        if params.get('SM_LENGTH'):
-            if params['SM_LENGTH'] > 40:
-                params['SM_LENGTH'] = 40
+        params = self.check_length(params)
 
         response = requests.get(self.endpoint, params=params)
         response.close()
