@@ -1,10 +1,10 @@
 import pandas as pd
 import argparse
 import pathlib
-import ntpath
 import csv
 import os
 
+from urllib.parse import urlparse
 from smmryapi import SmmryAPI
 from smmryapi import SmmryAPIException
 
@@ -63,6 +63,24 @@ def get_output_filename(name):
     return str(export_path)
 
 
+def validate_url(urls):
+
+    good_urls = []
+
+    for url in urls:
+        result = urlparse(url)
+
+        if len(result.netloc) == 0:
+            print("Invalid url: %s" % url)
+        else:
+            good_urls.append(url)
+
+    if len(good_urls) == 0:
+        raise Exception("File does not contain any working URLs.")
+
+    return good_urls
+
+
 def main():
 
     args = get_arguments()
@@ -84,11 +102,13 @@ def main():
 
         smmry = SmmryAPI(args.key)
 
-        requests_remaining = []
+        requests_remaining = ''
         total_urls = len(urls)
         successful_urls = 0
 
-        for url in urls:
+        good_urls = validate_url(urls)
+
+        for url in good_urls:
 
             try:
                 s = smmry.summarize(
