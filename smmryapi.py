@@ -37,8 +37,7 @@ class SmmryAPI:
         keys_to_drop = []
 
         for key, value in kwargs_dict.items():
-            if key in self.bool_params:
-                if not value:
+            if key in self.bool_params and not value:
                     keys_to_drop.append(key)
 
         for key in keys_to_drop:
@@ -55,6 +54,7 @@ class SmmryAPI:
 
         # "Note: The parameter &SM_URL= should always be at the end of the
         # request url to avoid complications" (see https://smmry.com/api).
+
         params.update({'sm_api_key': self.key})
         params.update({'sm_url': url})
         params.move_to_end('sm_url')
@@ -64,8 +64,6 @@ class SmmryAPI:
     def summarize(self, url, **kwargs):
 
         params = self.kwargs2params(url, kwargs)
-
-        print(params)
 
         response = requests.get(self.endpoint, params=params)
         response.close()
