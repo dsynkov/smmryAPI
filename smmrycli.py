@@ -23,6 +23,15 @@ def get_arguments():
     parser.add_argument('-k', '--keywords', type=int, default=3,
                         help="Select the number of keywords to return.")
 
+    parser.add_argument('-b', '--with_break', action='store_true',
+                        help="Select to include [BREAK] (default False).")
+
+    parser.add_argument('-r', '--replace_break', type=str,
+                        help="If -b is selected, select what you want to replace [BREAK] with.")
+
+    parser.add_argument('-q', '--quote_avoid', action='store_true',
+                        help="Select if you want to avoid quotes in your summary.")
+
     return parser.parse_args()
 
 
@@ -114,7 +123,9 @@ def main():
                 s = smmry.summarize(
                     url,
                     sm_length=args.length,
-                    sm_keyword_count=args.keywords
+                    sm_keyword_count=args.keywords,
+                    sm_with_break=args.with_break,
+                    sm_break_with=args.replace_break
                 )
 
                 successful_urls += 1
