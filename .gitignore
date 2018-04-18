@@ -3,3 +3,4 @@ test.py
 *.sh
 *.idea
 __pycache__
+misc/*
