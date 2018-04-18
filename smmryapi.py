@@ -52,9 +52,8 @@ class SmmryAPI:
 
         params = collections.OrderedDict(params_bool)
 
-        # "Note: The parameter &SM_URL= should always be at the end of the
-        # request url to avoid complications" (see https://smmry.com/api).
-
+        # Note: The parameter &SM_URL= should always be at the end of the
+        # request url to avoid complications (see https://smmry.com/api).
         params.update({'sm_api_key': self.key})
         params.update({'sm_url': url})
         params.move_to_end('sm_url')
@@ -72,6 +71,9 @@ class SmmryAPI:
 
         if smmry_dict.get('sm_api_error'):
             raise SmmryAPIException("%s: %s" % (smmry_dict['sm_api_error'], smmry_dict['sm_api_message']))
+
+        if params.get('SM_WITH_BREAK'):
+            smmry_dict['sm_api_content'] = smmry_dict['sm_api_content'].replace('[BREAK]', params['SM_BREAK_WITH'])
 
         smmry_dict['sm_api_content'] = smmry_dict['sm_api_content'].strip()
 
