@@ -73,7 +73,7 @@ class SmmryAPI:
             raise SmmryAPIException("%s: %s" % (smmry_dict['sm_api_error'], smmry_dict['sm_api_message']))
 
         if params.get('SM_WITH_BREAK'):
-            smmry_dict['sm_api_content'] = smmry_dict['sm_api_content'].replace('[BREAK]', params['SM_BREAK_WITH'])
+            smmry_dict['sm_api_content'] = smmry_dict['sm_api_content'].replace('[BREAK]', params['SM_WITH_BREAK'])
 
         smmry_dict['sm_api_content'] = smmry_dict['sm_api_content'].strip()
 
